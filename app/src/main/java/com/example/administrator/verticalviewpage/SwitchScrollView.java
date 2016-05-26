@@ -169,11 +169,13 @@ public class SwitchScrollView extends ScrollView {
     //do not consumed any scroll distance from child list
     @Override
     public void onNestedPreScroll(View target, int dx, int dy, int[] consumed) {
-        //super.onNestedPreScroll(target, dx, dy, consumed);
+        if(!mScrollable) return;
+        super.onNestedPreScroll(target, dx, dy, consumed);
     }
 
     @Override
     public void onNestedScroll(View target, int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed) {
-        //super.onNestedScroll(target, dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed);
+        if(!mScrollable) return;
+        super.onNestedScroll(target, dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed);
     }
 }
