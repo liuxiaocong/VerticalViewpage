@@ -1,43 +1,44 @@
 package com.example.administrator.verticalviewpage;
 
 import android.content.Context;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.view.WindowManager;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
-public class ToggleFullscreenActivity extends AppCompatActivity {
+public class InsideListActivity extends AppCompatActivity {
     private int mScreenWidth;
     private int mScreenHeight;
     private View mWrap1;
     private View mWrap2;
     private View mWrap3;
+    NameAdapter nameAdapter;
+    RecyclerView recyclerView;
     SwitchScrollView switchScrollView;
-    String TAG = "ToggleFullscreenActivity";
+    String TAG = "MainActivity";
     private int mAffectedDistance = 300;
     private TCurrentTouchAreaType mTCurrentTouchAreaType = TCurrentTouchAreaType.ENone;
     private TCurrentScreenType mTCurrentScreenType = TCurrentScreenType.EMainScreen;
     float mStartY = 0;
-    View mRoot;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_toggle_fullscreen_status);
-        mRoot = getWindow().getDecorView();
+        setContentView(R.layout.activity_inside_list);
+        View mRoot = getWindow().getDecorView();
         DisplayMetrics dm = getResources().getDisplayMetrics();
         mScreenWidth = dm.widthPixels;
-        mScreenHeight = dm.heightPixels;
+        mScreenHeight = dm.heightPixels - getStatusBarHeight(this);
         mWrap1 = findViewById(R.id.wrap1);
         mWrap2 = findViewById(R.id.wrap2);
         mWrap3 = findViewById(R.id.wrap3);
@@ -53,6 +54,25 @@ public class ToggleFullscreenActivity extends AppCompatActivity {
         lp3.height = mScreenHeight;
         mWrap3.setLayoutParams(lp1);
 
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        recyclerView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                Log.d(TAG,"Event:" + event.getAction());
+                switch (event.getAction() & MotionEvent.ACTION_MASK) {
+                    case MotionEvent.ACTION_DOWN:{
+                        switchScrollView.setIsScrollable(false);
+                    }
+                    break;
+                    case MotionEvent.ACTION_UP:{
+                        switchScrollView.setIsScrollable(true);
+                    }
+                    break;
+                }
+                return false;
+            }
+        });
+        initData();
         switchScrollView = (SwitchScrollView) findViewById(R.id.switch_scroll_view);
         switchScrollView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -64,30 +84,6 @@ public class ToggleFullscreenActivity extends AppCompatActivity {
 //                /switchScrollView.setIsScrollable(false);
             }
         });
-
-        mRoot.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                boolean isKeyboardShown = isKeyboardShown();
-                Log.d(TAG, "onGlobalLayout");
-                Log.d(TAG, "isKeyboardShown:" + isKeyboardShown());
-                if(isKeyboardShown)
-                {
-                    setFullScreen(false);
-                }else {
-                    setFullScreen(true);
-                }
-            }
-        });
-    }
-
-    private boolean isKeyboardShown() {
-        final int softKeyboardHeight = 100;
-        Rect r = new Rect();
-        mRoot.getWindowVisibleDisplayFrame(r);
-        DisplayMetrics dm = mRoot.getResources().getDisplayMetrics();
-        int heightDiff = mRoot.getBottom() - r.bottom;
-        return heightDiff > softKeyboardHeight * dm.density;
     }
 
     private SwitchScrollView.IOnTouchEventListener mOnScrollTouchListener = new SwitchScrollView.IOnTouchEventListener() {
@@ -181,6 +177,20 @@ public class ToggleFullscreenActivity extends AppCompatActivity {
         });
     }
 
+    private void initData() {
+        NameAdapter nameAdapter = new NameAdapter();
+        List<String> name = new ArrayList<>();
+        int i = 0;
+        while (i < 100) {
+            name.add("user" + i);
+            i++;
+        }
+        nameAdapter.setData(name);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(nameAdapter);
+    }
 
     public int getStatusBarHeight(Context context) {
         Class<?> c;
@@ -198,15 +208,5 @@ public class ToggleFullscreenActivity extends AppCompatActivity {
             e1.printStackTrace();
         }
         return statusBarHeight;
-    }
-
-    public void setFullScreen(boolean isFullScreen) {
-        if (isFullScreen) {
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        } else {
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
-        }
     }
 }
