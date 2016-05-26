@@ -12,8 +12,8 @@ import android.widget.ScrollView;
  * Created by LiuXiaocong on 3/31/2016.
  * use for watch page only
  */
-public class WatchScrollView extends ScrollView {
-    String TAG = "WatchScrollView";
+public class SwitchScrollView extends ScrollView {
+    String TAG = "SwitchScrollView";
     private int mCurrentScreenHeight = 0;
     private boolean mIsScrolling = false;
     private int mFullScreenHeight = -1;
@@ -41,15 +41,15 @@ public class WatchScrollView extends ScrollView {
         mIOnTouchEventListener = onTouchEventListener;
     }
 
-    public WatchScrollView(Context context) {
+    public SwitchScrollView(Context context) {
         super(context);
     }
 
-    public WatchScrollView(Context context, AttributeSet attrs) {
+    public SwitchScrollView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public WatchScrollView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public SwitchScrollView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         setSmoothScrollingEnabled(true);
     }
@@ -75,6 +75,7 @@ public class WatchScrollView extends ScrollView {
         return super.onTouchEvent(ev);
     }
 
+    //handle when fullscreen change to unfullscreen;
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         Log.d(TAG, "onMeasure");
@@ -84,14 +85,10 @@ public class WatchScrollView extends ScrollView {
         ViewGroup.LayoutParams lp = child.getLayoutParams();
         lp.height = screenHeight;
         child.setLayoutParams(lp);
-//        if (mCurrentScreenHeight != 0 && mCurrentScreenHeight != screenHeight && mIMyScrollViewListener != null && !mIsScrolling) {
-//            View child2 = viewGroup.getChildAt(2);
-//            child2.setVisibility(GONE);
-//        }
-
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
+    //handle when keybroad up;
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         mCurrentScreenHeight = b - t;
@@ -169,4 +166,14 @@ public class WatchScrollView extends ScrollView {
     }
 
 
+    //do not consumed any scroll distance from child list
+    @Override
+    public void onNestedPreScroll(View target, int dx, int dy, int[] consumed) {
+        //super.onNestedPreScroll(target, dx, dy, consumed);
+    }
+
+    @Override
+    public void onNestedScroll(View target, int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed) {
+        //super.onNestedScroll(target, dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed);
+    }
 }

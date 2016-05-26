@@ -4,9 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.administrator.verticalviewpage.MainActivity">
-
-    <com.example.administrator.verticalviewpage.WatchScrollView
+    <com.example.administrator.verticalviewpage.SwitchScrollView
         android:layout_width="match_parent"
+        android:id="@+id/switch_scroll_view"
         android:layout_height="wrap_content">
 
         <LinearLayout
@@ -59,5 +59,5 @@
         </LinearLayout>
 
 
-    </com.example.administrator.verticalviewpage.WatchScrollView>
+    </com.example.administrator.verticalviewpage.SwitchScrollView>
 </RelativeLayout>

@@ -1,6 +1,7 @@
 package com.example.administrator.verticalviewpage;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,7 +17,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class ToggleFullscreenActivity extends AppCompatActivity {
     private int mScreenWidth;
     private int mScreenHeight;
     private View mWrap1;
@@ -25,12 +26,11 @@ public class MainActivity extends AppCompatActivity {
     NameAdapter nameAdapter;
     RecyclerView recyclerView;
     SwitchScrollView switchScrollView;
-    String TAG = "MainActivity";
+    String TAG = "ToggleFullscreenActivity";
     private int mAffectedDistance = 300;
     private TCurrentTouchAreaType mTCurrentTouchAreaType = TCurrentTouchAreaType.ENone;
     private TCurrentScreenType mTCurrentScreenType = TCurrentScreenType.EMainScreen;
     float mStartY = 0;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,23 +55,6 @@ public class MainActivity extends AppCompatActivity {
         mWrap3.setLayoutParams(lp1);
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        recyclerView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                Log.d(TAG,"Event:" + event.getAction());
-                switch (event.getAction() & MotionEvent.ACTION_MASK) {
-                    case MotionEvent.ACTION_DOWN:{
-                        switchScrollView.setIsScrollable(false);
-                    }
-                    break;
-                    case MotionEvent.ACTION_UP:{
-                        switchScrollView.setIsScrollable(true);
-                    }
-                    break;
-                }
-                return false;
-            }
-        });
         initData();
         switchScrollView = (SwitchScrollView) findViewById(R.id.switch_scroll_view);
         switchScrollView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -81,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
                 switchScrollView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
                 switchScrollView.setOnTouchEventListener(mOnScrollTouchListener);
                 switchScrollView.setScrollY(mScreenHeight);
-//                /switchScrollView.setIsScrollable(false);
+                switchScrollView.setIsScrollable(false);
             }
         });
     }
@@ -102,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
                     Log.d(TAG, "ScrollView startY:" + mStartY);
                     Log.d(TAG, "ScrollView endY:" + endY);
                     Log.d(TAG, "ScrollView distance:" + (endY - mStartY));
-                    if (mTCurrentScreenType.equals(TCurrentScreenType.EMainScreen)) {
+                    if (mTCurrentTouchAreaType.equals(TCurrentTouchAreaType.EHotArea)) {
                         if (endY - mStartY > mAffectedDistance) {
                             goFirst();
                         } else if (endY - mStartY < -mAffectedDistance) {
@@ -110,13 +93,13 @@ public class MainActivity extends AppCompatActivity {
                         } else {
                             goMiddle();
                         }
-                    } else if (mTCurrentScreenType.equals(TCurrentScreenType.EFirstScreen)) {
+                    } else if (mTCurrentTouchAreaType.equals(TCurrentTouchAreaType.EFirstScreen)) {
                         if (endY - mStartY < -mAffectedDistance) {
                             goMiddle();
                         } else {
                             goFirst();
                         }
-                    } else if (mTCurrentScreenType.equals(TCurrentScreenType.ENextScreen)) {
+                    } else if (mTCurrentTouchAreaType.equals(TCurrentTouchAreaType.ENextScreen)) {
                         {
                             if (endY - mStartY > mAffectedDistance) {
                                 goMiddle();
@@ -177,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void initData() {
+    private void initData(){
         NameAdapter nameAdapter = new NameAdapter();
         List<String> name = new ArrayList<>();
         int i = 0;
@@ -191,7 +174,6 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(nameAdapter);
     }
-
     public int getStatusBarHeight(Context context) {
         Class<?> c;
         Object obj;
