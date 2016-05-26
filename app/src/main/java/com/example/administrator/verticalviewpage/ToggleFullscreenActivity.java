@@ -69,8 +69,8 @@ public class ToggleFullscreenActivity extends AppCompatActivity {
             @Override
             public void onGlobalLayout() {
                 boolean isKeyboardShown = isKeyboardShown();
-                Log.d(TAG, "onGlobalLayout");
-                Log.d(TAG, "isKeyboardShown:" + isKeyboardShown());
+                //Log.d(TAG, "onGlobalLayout");
+                //Log.d(TAG, "isKeyboardShown:" + isKeyboardShown());
                 if(isKeyboardShown)
                 {
                     setFullScreen(false);
