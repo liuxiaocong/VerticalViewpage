@@ -20,7 +20,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="#FFFF00">
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -33,12 +32,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="#FF0000">
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycler_view"
+                    android:layout_width="300dp"
+                    android:layout_height="200dp"
+                    android:layout_gravity="left|center_vertical"
+                    android:background="#50ffffff"
+                    android:clipToPadding="false"
+                    android:padding="8dp"
+                    android:scrollbars="none" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center|center_vertical"
-                    android:text="2" />
             </FrameLayout>
 
             <FrameLayout

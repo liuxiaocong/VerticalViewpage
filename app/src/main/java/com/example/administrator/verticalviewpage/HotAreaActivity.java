@@ -1,7 +1,6 @@
 package com.example.administrator.verticalviewpage;
 
 import android.content.Context;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,7 +13,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class HotAreaActivity extends AppCompatActivity {
     private int mScreenWidth;
     private int mScreenHeight;
     private View mWrap1;
@@ -59,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
             i++;
         }
         nameAdapter.setData(name);
-        android.support.v7.widget.LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(nameAdapter);
