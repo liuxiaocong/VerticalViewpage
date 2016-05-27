@@ -17,6 +17,7 @@ public class SwitchScrollView extends ScrollView {
     private int mCurrentScreenHeight = 0;
     private boolean mIsScrolling = false;
     private int mFullScreenHeight = -1;
+    private boolean mDefaultScrollStatus = true;
 
     public void setCurrentScreenType(TCurrentScreenType currentScreenType) {
         mCurrentScreenType = currentScreenType;
@@ -52,6 +53,11 @@ public class SwitchScrollView extends ScrollView {
     public SwitchScrollView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         setSmoothScrollingEnabled(true);
+        setIsScrollable(mDefaultScrollStatus);
+    }
+
+    public void setDefaultScrollStatus(boolean defaultScrollStatus){
+        mDefaultScrollStatus = defaultScrollStatus;
     }
 
     @Override
@@ -64,7 +70,7 @@ public class SwitchScrollView extends ScrollView {
                 Log.d(TAG, "ACTION_DOWN");
                 break;
             case MotionEvent.ACTION_UP:
-                //mScrollable = false;
+                mScrollable = mDefaultScrollStatus;
                 mIsScrolling = false;
                 Log.d(TAG, "ACTION_UP");
                 break;

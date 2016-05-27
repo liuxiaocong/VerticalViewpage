@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".InsideListActivity">
+    <com.example.administrator.verticalviewpage.SwitchScrollView
+        android:layout_width="match_parent"
+        android:id="@+id/switch_scroll_view"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:id="@+id/wrap1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#FFFF00">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|center_vertical"
+                    android:text="1" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/wrap2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#FF0000">
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycler_view"
+                    android:layout_width="150dp"
+                    android:layout_height="200dp"
+                    android:layout_gravity="left|center_vertical"
+                    android:background="#50ffffff"
+                    android:clipToPadding="false"
+                    android:padding="8dp"
+                    android:scrollbars="none" />
+
+                <View
+                    android:id="@+id/main_hot_area"
+                    android:layout_gravity="right|center_vertical"
+                    android:background="#500000ff"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"/>
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/wrap3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#FF00FF">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|center_vertical"
+                    android:text="3" />
+            </FrameLayout>
+        </LinearLayout>
+
+
+    </com.example.administrator.verticalviewpage.SwitchScrollView>
+</RelativeLayout>
