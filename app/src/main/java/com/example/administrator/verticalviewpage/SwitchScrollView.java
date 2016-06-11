@@ -5,6 +5,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.ScrollView;
 
@@ -18,6 +19,8 @@ public class SwitchScrollView extends ScrollView {
     private boolean mIsScrolling = false;
     private int mFullScreenHeight = -1;
     private boolean mDefaultScrollStatus = true;
+    private float mSlop = new ViewConfiguration().getScaledTouchSlop();
+    private float mTouchDownY;
 
     public void setCurrentScreenType(TCurrentScreenType currentScreenType) {
         mCurrentScreenType = currentScreenType;
@@ -183,5 +186,25 @@ public class SwitchScrollView extends ScrollView {
     public void onNestedScroll(View target, int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed) {
         if(!mScrollable) return;
         super.onNestedScroll(target, dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed);
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        if(!mIsScrolling) return false;
+        switch (ev.getActionMasked()) {
+            case MotionEvent.ACTION_DOWN : {
+                mTouchDownY = ev.getY();
+            }
+            break;
+            case MotionEvent.ACTION_MOVE : {
+                float dist = mTouchDownY - ev.getY();
+                dist = Math.abs(dist);
+                if(dist > mSlop) {
+                    return true;
+                }
+            }
+            break;
+        }
+        return false;
     }
 }
